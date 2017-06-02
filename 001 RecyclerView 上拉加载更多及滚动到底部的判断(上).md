@@ -1,5 +1,5 @@
 # RecyclerView 上拉加载更多及滚动到底部的判断(上) #
-关于下拉刷新上拉加载更多，网上有很多例子；下拉刷新比较简单直接使用系统提供 SwipeRefreshLayout 即可，比较麻烦的是上拉加载更多，使用了几个上拉加载更多的 demo ，都有或多或少的 bug ，还是自己写个吧...
+关于下拉刷新上拉加载更多，网上有很多例子；下拉刷新比较简单直接使用系统提供 SwipeRefreshLayout 即可，比较麻烦的是上拉加载更多，实现上拉的方法多种多样，这里对各个方法总结一下。
 
 ## 需求分析 ##
 RecyclerView 滚动到底部后，用户再往上拖拽（这里使用场景是拖拽，而不是手指离屏后的自动滚动到底部）时，RecyclerView 展示出 加载更多 的字样并请求更多的数据，请求成功后更新 RecyclerView ；在默认情况下 RecyclerView 的高度大于可展示高度，即 RecyclerView 没有展示出全部 item ，可滑动，反之则说明不需要加载更多。
@@ -8,7 +8,7 @@ RecyclerView 滚动到底部后，用户再往上拖拽（这里使用场景是�
 - 判断 RecyclerView 拖拽
 
 ## 判断 RecyclerView 滚动到了底部 ##
-判断 RecyclerView 是否到达底部网上流传着下面几种方法，这些方法都存在些许问题，最后我们再给出正确的方式。
+判断 RecyclerView 是否到达底部网上流传着下面几种方法，这些方法都存在些许问题，最后我们再给出推荐的方式。
 
 **1. 根据 item 判断是否到达底部**
 这种方法最常见，一般都是像下面这样实现：
@@ -140,7 +140,7 @@ RecyclerView 滚动到底部后，用户再往上拖拽（这里使用场景是�
         });
 
 ## 推荐方法 ##
-该方法和 View#canScrollVertically(int direction) 实现原理相似，针对上拉拖拽且有可能 items 没有填充满整个 RecyclerView 这个场景做了优化，代码如下：
+该方法在 View#canScrollVertically(int direction) 的基础上，针对上拉拖拽且有可能 items 没有填充满整个 RecyclerView 这个场景做了优化，代码如下：
 
 	RecyclerView.addOnScrollListener(new OnScrollListener() {
             @Override
@@ -168,6 +168,7 @@ RecyclerView 滚动到底部后，用户再往上拖拽（这里使用场景是�
             }
         });
 
+到这里，上拉的判断就处理完成了，下一篇将处理 加载更多 视图的显示。
 
 附一张原理图：
 
